@@ -15,11 +15,11 @@ npm run dev
 npm run build
 ```
 
-Der statische Output liegt danach in `docs/games/stack-beam/`.
+Der statische Output liegt danach in `dist/`.
 
 ## Statisch hosten
 
-Den Inhalt von `docs/games/stack-beam/` auf einen beliebigen Static Host legen, zum Beispiel:
+Den Inhalt von `dist/` auf einen beliebigen Static Host legen, zum Beispiel:
 
 - GitHub Pages
 - Netlify
