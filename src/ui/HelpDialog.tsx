@@ -47,6 +47,70 @@ export function HelpDialog() {
               <p>{t(language, 'help.rule.8')}</p>
               <p>{t(language, 'help.rule.9')}</p>
             </div>
+
+            <div className="panel-section help-color-guide">
+              <p className="panel-label">{t(language, 'help.color.title')}</p>
+
+              <div className="help-color-guide__sources">
+                <div className="help-color-guide__source-item">
+                  <span className="help-color-swatch help-color-swatch--cyan" aria-hidden="true" />
+                  <span>{t(language, 'help.color.source.cyan')}</span>
+                </div>
+                <div className="help-color-guide__source-item">
+                  <span className="help-color-swatch help-color-swatch--magenta" aria-hidden="true" />
+                  <span>{t(language, 'help.color.source.magenta')}</span>
+                </div>
+              </div>
+
+              <div className="help-color-guide__examples">
+                <div className="help-color-guide__example">
+                  <span className="help-color-swatch help-color-swatch--empty" aria-hidden="true" />
+                  <span className="help-color-guide__op">+</span>
+                  <span className="help-color-swatch help-color-swatch--cyan" aria-hidden="true" />
+                  <span className="help-color-guide__op">=</span>
+                  <span className="help-color-swatch help-color-swatch--cyan" aria-hidden="true" />
+                  <span className="help-color-guide__text">{t(language, 'help.color.rule.empty')}</span>
+                </div>
+
+                <div className="help-color-guide__example">
+                  <span className="help-color-swatch help-color-swatch--magenta" aria-hidden="true" />
+                  <span className="help-color-guide__op">+</span>
+                  <span className="help-color-swatch help-color-swatch--magenta" aria-hidden="true" />
+                  <span className="help-color-guide__op">=</span>
+                  <span className="help-color-swatch help-color-swatch--magenta" aria-hidden="true" />
+                  <span className="help-color-guide__text">{t(language, 'help.color.rule.same')}</span>
+                </div>
+
+                <div className="help-color-guide__example">
+                  <span className="help-color-swatch help-color-swatch--cyan" aria-hidden="true" />
+                  <span className="help-color-guide__op">+</span>
+                  <span className="help-color-swatch help-color-swatch--magenta" aria-hidden="true" />
+                  <span className="help-color-guide__op">=</span>
+                  <span className="help-color-swatch help-color-swatch--mix" aria-hidden="true" />
+                  <span className="help-color-guide__text">{t(language, 'help.color.rule.mix')}</span>
+                </div>
+
+                <div className="help-color-guide__example">
+                  <span className="help-color-swatch help-color-swatch--mix" aria-hidden="true" />
+                  <span className="help-color-guide__op">+</span>
+                  <span className="help-color-swatch help-color-swatch--cyan" aria-hidden="true" />
+                  <span className="help-color-guide__op">=</span>
+                  <span className="help-color-swatch help-color-swatch--white" aria-hidden="true" />
+                  <span className="help-color-guide__text">{t(language, 'help.color.rule.white')}</span>
+                </div>
+
+                <div className="help-color-guide__example">
+                  <span className="help-color-swatch help-color-swatch--white" aria-hidden="true" />
+                  <span className="help-color-guide__op">+</span>
+                  <span className="help-color-swatch help-color-swatch--magenta" aria-hidden="true" />
+                  <span className="help-color-guide__op">=</span>
+                  <span className="help-color-swatch help-color-swatch--white" aria-hidden="true" />
+                  <span className="help-color-guide__text">{t(language, 'help.color.rule.lockWhite')}</span>
+                </div>
+              </div>
+
+              <p className="target-panel__summary">{t(language, 'help.color.note')}</p>
+            </div>
           </section>
         </div>
       ) : null}

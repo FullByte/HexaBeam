@@ -1,7 +1,14 @@
 import { RoundedBox, Text } from '@react-three/drei';
 import type { ThreeEvent } from '@react-three/fiber';
 import type { EdgeShot } from '../../core/types';
-import { VISUAL_PALETTE, edgeToWorld, getBeamVisualColor, toHexIndex } from '../rendering';
+import {
+  BLOCK_HEIGHT,
+  CELL_SIZE,
+  VISUAL_PALETTE,
+  edgeToWorld,
+  getBeamVisualColor,
+  toHexIndex,
+} from '../rendering';
 
 interface EdgeNodeProps {
   edge: EdgeShot;
@@ -28,11 +35,11 @@ export function EdgeNode({
   const isCyanSide = edge.side === 'top' || edge.side === 'bottom';
   const beamColor = getBeamVisualColor(isCyanSide ? 'cyan' : 'magenta');
   const color = used ? '#31415f' : blocked ? VISUAL_PALETTE.danger : beamColor;
-  const scale = hovered ? 1.15 : 1;
+  const scale = hovered ? 1.08 : 1;
   const rotation: [number, number, number] =
     edge.side === 'left' || edge.side === 'right' ? [0, 0, 0.18] : [0.18, 0, 0];
-  const labelColor = used ? '#8d9ab7' : blocked ? '#ffd7db' : isCyanSide ? '#bff7ff' : '#ffd1f0';
-  const outlineColor = used ? '#1a2237' : blocked ? '#5d1b28' : isCyanSide ? '#0c3950' : '#551539';
+  const labelColor = used ? '#d0d8ec' : blocked ? '#fff0f2' : '#ffffff';
+  const outlineColor = used ? '#11192b' : blocked ? '#4a111f' : '#050913';
   const glowColor = used ? '#1c2740' : blocked ? VISUAL_PALETTE.danger : beamColor;
 
   function stopEvent(event: ThreeEvent<MouseEvent>) {
@@ -43,7 +50,8 @@ export function EdgeNode({
     <group position={position}>
       <group rotation={rotation}>
         <RoundedBox
-          args={[0.52 * scale, 0.22 * scale, 0.52 * scale]}
+          args={[CELL_SIZE * 0.72 * scale, BLOCK_HEIGHT * scale, CELL_SIZE * 0.72 * scale]}
+          position={[0, 0.1, 0]}
           radius={0.08}
           smoothness={4}
           onPointerOver={(event) => {
@@ -70,13 +78,13 @@ export function EdgeNode({
       </group>
 
       <Text
-        position={[0, 0.16, 0]}
+        position={[0, 0.42, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
-        fontSize={0.22 * scale}
-        maxWidth={0.46 * scale}
+        fontSize={0.31 * scale}
+        maxWidth={0.62 * scale}
         color={labelColor}
         outlineColor={outlineColor}
-        outlineWidth={0.02}
+        outlineWidth={0.045}
         anchorX="center"
         anchorY="middle"
       >
@@ -84,8 +92,8 @@ export function EdgeNode({
         <meshBasicMaterial color={labelColor} toneMapped={false} />
       </Text>
 
-      <mesh position={[0, 0.12, 0]}>
-        <ringGeometry args={[0.18 * scale, 0.24 * scale, 32]} />
+      <mesh position={[0, 0.31, 0]}>
+        <ringGeometry args={[0.24 * scale, 0.31 * scale, 32]} />
         <meshBasicMaterial color={glowColor} transparent opacity={hovered ? 0.28 : 0.16} />
       </mesh>
     </group>

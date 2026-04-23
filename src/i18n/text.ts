@@ -6,6 +6,7 @@ type TranslationKey =
   | 'language.label'
   | 'language.en'
   | 'language.de'
+  | 'difficulty.label'
   | 'blocks.label'
   | 'controls.undo'
   | 'controls.reset'
@@ -13,6 +14,7 @@ type TranslationKey =
   | 'controls.solution'
   | 'controls.music'
   | 'controls.target'
+  | 'controls.nextPuzzle'
   | 'controls.play'
   | 'controls.pause'
   | 'music.noTracks'
@@ -29,6 +31,15 @@ type TranslationKey =
   | 'help.rule.7'
   | 'help.rule.8'
   | 'help.rule.9'
+  | 'help.color.title'
+  | 'help.color.source.cyan'
+  | 'help.color.source.magenta'
+  | 'help.color.rule.empty'
+  | 'help.color.rule.same'
+  | 'help.color.rule.mix'
+  | 'help.color.rule.white'
+  | 'help.color.rule.lockWhite'
+  | 'help.color.note'
   | 'help.canonicalTitle'
   | 'help.validationOk'
   | 'help.validationFailed'
@@ -78,6 +89,7 @@ const translations: Record<Language, TranslationDictionary> = {
     'language.label': 'Language',
     'language.en': 'English',
     'language.de': 'Deutsch',
+    'difficulty.label': 'Difficulty',
     'blocks.label': 'Blocks',
     'controls.undo': 'Undo',
     'controls.reset': 'Reset',
@@ -85,6 +97,7 @@ const translations: Record<Language, TranslationDictionary> = {
     'controls.solution': 'Solution',
     'controls.music': 'Music',
     'controls.target': 'Target',
+    'controls.nextPuzzle': 'Next Puzzle',
     'controls.play': 'Play',
     'controls.pause': 'Pause',
     'music.noTracks': 'No tracks',
@@ -94,13 +107,23 @@ const translations: Record<Language, TranslationDictionary> = {
     'help.close': 'Close',
     'help.rule.1': 'Build the color image on the 16x16 board exactly like the target image.',
     'help.rule.2': 'Top and bottom fire Cyan, left and right fire Magenta.',
-    'help.rule.3': 'If Cyan and Magenta meet on a cell, the result becomes Mix.',
-    'help.rule.4': 'If a beam meets an already mixed beam, the remaining path becomes White.',
+    'help.rule.3': 'If Cyan and Magenta meet on the same cell, the result becomes Mix.',
+    'help.rule.4': 'If a Mix beam later meets Cyan or Magenta, the remaining beam path becomes White.',
     'help.rule.5': 'Beams travel straight and stop before the first block.',
     'help.rule.6': 'Player blocks can only be placed on empty, uncolored cells.',
     'help.rule.7': 'Each edge node can only be used once.',
     'help.rule.8': 'Undo reverts the last move, Reset restarts the level.',
     'help.rule.9': 'Notation: T/B/L/R + hex slot for beams, X + hex XY for blocks (e.g. X6A).',
+    'help.color.title': 'Color Rules (Visual Guide)',
+    'help.color.source.cyan': 'Top/Bottom edges fire Cyan',
+    'help.color.source.magenta': 'Left/Right edges fire Magenta',
+    'help.color.rule.empty': '+= Empty cell + first beam = beam color',
+    'help.color.rule.same': '+= Same color + same color = same color',
+    'help.color.rule.mix': '+= Cyan + Magenta = Mix',
+    'help.color.rule.white': '+= Mix + Cyan/Magenta = White',
+    'help.color.rule.lockWhite': '+= White + any color = White',
+    'help.color.note':
+      'Important: beam color can change while traveling through intersections. Each crossed cell stores the current beam color at that moment.',
     'help.canonicalTitle': 'Verified Canonical Solution',
     'help.validationOk': 'Validated against the core rules with {steps} canonical steps.',
     'help.validationFailed': 'Validation failed.',
@@ -148,6 +171,7 @@ const translations: Record<Language, TranslationDictionary> = {
     'language.label': 'Sprache',
     'language.en': 'English',
     'language.de': 'Deutsch',
+    'difficulty.label': 'Schwierigkeit',
     'blocks.label': 'Blöcke',
     'controls.undo': 'Rückgängig',
     'controls.reset': 'Zurücksetzen',
@@ -155,6 +179,7 @@ const translations: Record<Language, TranslationDictionary> = {
     'controls.solution': 'Lösung',
     'controls.music': 'Musik',
     'controls.target': 'Ziel',
+    'controls.nextPuzzle': 'Nächstes Rätsel',
     'controls.play': 'Play',
     'controls.pause': 'Pause',
     'music.noTracks': 'Keine Tracks',
@@ -165,12 +190,22 @@ const translations: Record<Language, TranslationDictionary> = {
     'help.rule.1': 'Baue das Farbbild auf dem 16x16-Feld exakt so nach wie im Zielbild.',
     'help.rule.2': 'Oben und unten feuern Cyan, links und rechts feuern Magenta.',
     'help.rule.3': 'Treffen Cyan und Magenta auf derselben Zelle zusammen, wird daraus Mix.',
-    'help.rule.4': 'Trifft ein Strahl auf einen bereits gemischten Strahl, wird der restliche Verlauf Weiß.',
+    'help.rule.4': 'Trifft ein Mix-Strahl später auf Cyan oder Magenta, wird der restliche Strahlverlauf Weiß.',
     'help.rule.5': 'Strahlen laufen gerade und stoppen vor dem ersten Block.',
     'help.rule.6': 'Spieler-Blöcke dürfen nur auf leere, noch ungefärbte Zellen gesetzt werden.',
     'help.rule.7': 'Jeder Randpunkt darf nur einmal benutzt werden.',
     'help.rule.8': 'Rückgängig setzt den letzten Zug zurück, Zurücksetzen startet das Level neu.',
     'help.rule.9': 'Notation: T/B/L/R + Hex-Slot für Strahlen, X + Hex-XY für Blöcke (z. B. X6A).',
+    'help.color.title': 'Farblogik (mit Beispielen)',
+    'help.color.source.cyan': 'Oben/Unten feuert Cyan',
+    'help.color.source.magenta': 'Links/Rechts feuert Magenta',
+    'help.color.rule.empty': '+= Leere Zelle + erster Strahl = Strahlfarbe',
+    'help.color.rule.same': '+= Gleiche Farbe + gleiche Farbe = gleiche Farbe',
+    'help.color.rule.mix': '+= Cyan + Magenta = Mix',
+    'help.color.rule.white': '+= Mix + Cyan/Magenta = Weiß',
+    'help.color.rule.lockWhite': '+= Weiß + beliebige Farbe = Weiß',
+    'help.color.note':
+      'Wichtig: Die Strahlfarbe kann sich entlang des Weges durch Kreuzungen ändern. Jede getroffene Zelle speichert die aktuell gemischte Strahlfarbe.',
     'help.canonicalTitle': 'Verifizierte kanonische Lösung',
     'help.validationOk': 'Mit den Core-Regeln verifiziert ({steps} kanonische Schritte).',
     'help.validationFailed': 'Validierung fehlgeschlagen.',
