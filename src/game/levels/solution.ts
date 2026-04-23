@@ -68,7 +68,7 @@ export function formatSolutionNotation(solution: RuntimeAction[]): string[] {
   return solution.map((action) => formatRuntimeActionNotation(action));
 }
 
-export function describeRuntimeAction(action: RuntimeAction, language: Language = 'en'): string {
+export function describeRuntimeAction(action: RuntimeAction, language: Language = 'de'): string {
   if (action.type === 'place-block') {
     return `${formatRuntimeActionNotation(action)} - ${t(language, 'action.placeBlock', {
       x: toHexIndex(action.position.x),

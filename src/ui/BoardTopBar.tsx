@@ -2,6 +2,7 @@ import { useGameStore } from '../game/state/store';
 import { getLocalizedLevelTitle, t, translateCoreMessage, type Language } from '../i18n/text';
 import { BackgroundMusicPlayer } from './BackgroundMusicPlayer';
 import { HelpDialog } from './HelpDialog';
+import { HintDialog } from './HintDialog';
 
 interface BoardTopBarProps {
   showTargetOverlay: boolean;
@@ -41,41 +42,48 @@ export function BoardTopBar({ showTargetOverlay, onToggleTargetOverlay }: BoardT
         </div>
 
         <div className="board-topbar__controls">
-          <select
-            className="level-select-inline language-select"
-            value={language}
-            onChange={(event) => setLanguage(event.target.value as Language)}
-            aria-label={t(language, 'language.label')}
-          >
-            <option value="en">{t(language, 'language.en')}</option>
-            <option value="de">{t(language, 'language.de')}</option>
-          </select>
-          <select
-            className="level-select-inline"
-            value={currentLevelId}
-            onChange={(event) => loadLevel(event.target.value)}
-          >
-            {levels.map((level) => (
-              <option key={level.id} value={level.id}>
-                {getLocalizedLevelTitle(level, language)}
-              </option>
-            ))}
-          </select>
-          <button type="button" className="control-button" onClick={undo} disabled={!canUndo}>
-            {t(language, 'controls.undo')}
-          </button>
-          <button type="button" className="control-button" onClick={reset}>
-            {t(language, 'controls.reset')}
-          </button>
-          <HelpDialog />
-          <button
-            type="button"
-            className={`help-button${showTargetOverlay ? ' help-button--active' : ''}`}
-            onClick={onToggleTargetOverlay}
-          >
-            {t(language, 'controls.target')}
-          </button>
-          <BackgroundMusicPlayer />
+          <div className="board-topbar__controls-row">
+            <select
+              className="level-select-inline level-select-inline--level"
+              value={currentLevelId}
+              onChange={(event) => loadLevel(event.target.value)}
+            >
+              {levels.map((level) => (
+                <option key={level.id} value={level.id}>
+                  {getLocalizedLevelTitle(level, language)}
+                </option>
+              ))}
+            </select>
+            <select
+              className="level-select-inline language-select"
+              value={language}
+              onChange={(event) => setLanguage(event.target.value as Language)}
+              aria-label={t(language, 'language.label')}
+            >
+              <option value="en">{t(language, 'language.en')}</option>
+              <option value="de">{t(language, 'language.de')}</option>
+            </select>
+            <button
+              type="button"
+              className={`help-button${showTargetOverlay ? ' help-button--active' : ''}`}
+              aria-pressed={showTargetOverlay}
+              onClick={onToggleTargetOverlay}
+            >
+              {t(language, 'controls.target')}
+            </button>
+            <BackgroundMusicPlayer />
+          </div>
+
+          <div className="board-topbar__controls-row">
+            <button type="button" className="control-button" onClick={undo} disabled={!canUndo}>
+              {t(language, 'controls.undo')}
+            </button>
+            <button type="button" className="control-button" onClick={reset}>
+              {t(language, 'controls.reset')}
+            </button>
+            <HelpDialog />
+            <HintDialog />
+          </div>
         </div>
       </div>
 

@@ -13,7 +13,7 @@ export function App() {
   const currentLevelId = useGameStore((state) => state.currentLevelId);
   const loadLevel = useGameStore((state) => state.loadLevel);
   const reset = useGameStore((state) => state.reset);
-  const [showTargetOverlay, setShowTargetOverlay] = useState(false);
+  const [showTargetOverlay, setShowTargetOverlay] = useState(true);
   const levelIndex = useMemo(
     () => levels.findIndex((level) => level.id === currentLevelId),
     [levels, currentLevelId],
@@ -25,6 +25,10 @@ export function App() {
       setShowTargetOverlay(false);
     }
   }, [isWin]);
+
+  useEffect(() => {
+    setShowTargetOverlay(true);
+  }, [currentLevelId]);
 
   function handleNextLevel() {
     if (nextLevel) {

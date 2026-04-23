@@ -10,6 +10,8 @@ type TranslationKey =
   | 'controls.undo'
   | 'controls.reset'
   | 'controls.help'
+  | 'controls.solution'
+  | 'controls.music'
   | 'controls.target'
   | 'controls.play'
   | 'controls.pause'
@@ -79,7 +81,9 @@ const translations: Record<Language, TranslationDictionary> = {
     'blocks.label': 'Blocks',
     'controls.undo': 'Undo',
     'controls.reset': 'Reset',
-    'controls.help': 'Help',
+    'controls.help': 'Rules',
+    'controls.solution': 'Solution',
+    'controls.music': 'Music',
     'controls.target': 'Target',
     'controls.play': 'Play',
     'controls.pause': 'Pause',
@@ -100,7 +104,7 @@ const translations: Record<Language, TranslationDictionary> = {
     'help.canonicalTitle': 'Verified Canonical Solution',
     'help.validationOk': 'Validated against the core rules with {steps} canonical steps.',
     'help.validationFailed': 'Validation failed.',
-    'help.hint': 'Hint',
+    'help.hint': 'Solution',
     'help.showSolution': 'Show Solution',
     'help.hideSolution': 'Hide Solution',
     'help.step': 'Step {step}:',
@@ -147,7 +151,9 @@ const translations: Record<Language, TranslationDictionary> = {
     'blocks.label': 'Blöcke',
     'controls.undo': 'Rückgängig',
     'controls.reset': 'Zurücksetzen',
-    'controls.help': 'Hilfe',
+    'controls.help': 'Regeln',
+    'controls.solution': 'Lösung',
+    'controls.music': 'Musik',
     'controls.target': 'Ziel',
     'controls.play': 'Play',
     'controls.pause': 'Pause',
@@ -168,7 +174,7 @@ const translations: Record<Language, TranslationDictionary> = {
     'help.canonicalTitle': 'Verifizierte kanonische Lösung',
     'help.validationOk': 'Mit den Core-Regeln verifiziert ({steps} kanonische Schritte).',
     'help.validationFailed': 'Validierung fehlgeschlagen.',
-    'help.hint': 'Hinweis',
+    'help.hint': 'Lösung',
     'help.showSolution': 'Lösung zeigen',
     'help.hideSolution': 'Lösung ausblenden',
     'help.step': 'Schritt {step}:',

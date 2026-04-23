@@ -26,7 +26,7 @@ export interface GameStore extends GameState {
 
 export const useGameStore = create<GameStore>((set, get) => ({
   ...initialState,
-  language: 'en',
+  language: 'de',
   levels,
   currentLevelId: initialLevel.id,
   preview: createEmptyPreviewState(),

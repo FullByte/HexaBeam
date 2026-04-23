@@ -1,8 +1,26 @@
-[
-  { "title": "Neon Circuit Drift", "src": "/audio/Neon%20Circuit%20Drift.mp3" },
-  { "title": "Neon Circuit Lights", "src": "/audio/Neon%20Circuit%20Lights.mp3" },
-  { "title": "Photon Runner", "src": "/audio/Photon%20Runner.mp3" },
-  { "title": "Photon Runner Part 2", "src": "/audio/Photon%20Runner%20Part%202.mp3" },
-  { "title": "Pixel Pulse Drift", "src": "/audio/Pixel%20Pulse%20Drift.mp3" },
-  { "title": "Pixel Pulse Thrift", "src": "/audio/Pixel%20Pulse%20Thrift.mp3" }
-]
+{
+  "easy": [
+    { "title": "Easy Song 1", "src": "/audio/easy-song1.mp3" },
+    { "title": "Easy Song 2", "src": "/audio/easy-song2.mp3" },
+    { "title": "Easy Song 3", "src": "/audio/easy-song3.mp3" },
+    { "title": "Easy Song 4", "src": "/audio/easy-song4.mp3" },
+    { "title": "Easy Song 5", "src": "/audio/easy-song5.mp3" },
+    { "title": "Easy Song 6", "src": "/audio/easy-song6.mp3" }
+  ],
+  "normal": [
+    { "title": "Normal Song 1", "src": "/audio/normal-song1.mp3" },
+    { "title": "Normal Song 2", "src": "/audio/normal-song2.mp3" },
+    { "title": "Normal Song 3", "src": "/audio/normal-song3.mp3" },
+    { "title": "Normal Song 4", "src": "/audio/normal-song4.mp3" },
+    { "title": "Normal Song 5", "src": "/audio/normal-song5.mp3" },
+    { "title": "Normal Song 6", "src": "/audio/normal-song6.mp3" }
+  ],
+  "hard": [
+    { "title": "Hard Song 1", "src": "/audio/hard-song1.mp3" },
+    { "title": "Hard Song 2", "src": "/audio/hard-song2.mp3" },
+    { "title": "Hard Song 3", "src": "/audio/hard-song3.mp3" },
+    { "title": "Hard Song 4", "src": "/audio/hard-song4.mp3" },
+    { "title": "Hard Song 5", "src": "/audio/hard-song5.mp3" },
+    { "title": "Hard Song 6", "src": "/audio/hard-song6.mp3" }
+  ]
+}
