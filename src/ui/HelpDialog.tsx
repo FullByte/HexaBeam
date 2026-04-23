@@ -42,10 +42,6 @@ export function HelpDialog() {
               <p>{t(language, 'help.rule.3')}</p>
               <p>{t(language, 'help.rule.4')}</p>
               <p>{t(language, 'help.rule.5')}</p>
-              <p>{t(language, 'help.rule.6')}</p>
-              <p>{t(language, 'help.rule.7')}</p>
-              <p>{t(language, 'help.rule.8')}</p>
-              <p>{t(language, 'help.rule.9')}</p>
             </div>
 
             <div className="panel-section help-color-guide">

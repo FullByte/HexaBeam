@@ -101,11 +101,49 @@ export function HintDialog() {
                 )}
               </div>
 
-              {level.metadata?.solutionNotation?.length ? (
-                <p className="target-panel__summary">
-                  {t(language, 'help.notationLabel')}: {level.metadata.solutionNotation.join('  ')}
+              <div className="panel-section notation-guide">
+                <p className="panel-label">{t(language, 'help.notationExplainTitle')}</p>
+                {level.metadata?.solutionNotation?.length ? (
+                  <p className="target-panel__summary">
+                    {t(language, 'help.notationLabel')}: {level.metadata.solutionNotation.join('  ')}
+                  </p>
+                ) : null}
+                <p className="target-panel__summary">{t(language, 'help.notationExplainIntro')}</p>
+                <p className="notation-guide__item">
+                  <span className="notation-token">T/B/L/R + Hex-Slot</span>
+                  {t(language, 'help.notationExplainEdge')}
                 </p>
-              ) : null}
+                <p className="notation-guide__item">
+                  <span className="notation-token">X + Hex-XY</span>
+                  {t(language, 'help.notationExplainBlock')}
+                </p>
+                <p className="target-panel__summary">{t(language, 'help.notationExplainHex')}</p>
+                <p className="target-panel__summary">{t(language, 'help.notationExplainExamples')}</p>
+
+                <p className="panel-label">{t(language, 'help.notationExplainDecodeTitle')}</p>
+                <ol className="notation-guide__list">
+                  <li>{t(language, 'help.notationExplainDecode.1')}</li>
+                  <li>{t(language, 'help.notationExplainDecode.2')}</li>
+                  <li>{t(language, 'help.notationExplainDecode.3')}</li>
+                  <li>{t(language, 'help.notationExplainDecode.4')}</li>
+                </ol>
+
+                <p className="panel-label">{t(language, 'help.notationExplainExamplesTitle')}</p>
+                <ul className="notation-guide__list">
+                  <li>
+                    <span className="notation-token">T4</span>
+                    {t(language, 'help.notationExplainExample.1')}
+                  </li>
+                  <li>
+                    <span className="notation-token">RA</span>
+                    {t(language, 'help.notationExplainExample.2')}
+                  </li>
+                  <li>
+                    <span className="notation-token">X6A</span>
+                    {t(language, 'help.notationExplainExample.3')}
+                  </li>
+                </ul>
+              </div>
 
               {showSolution ? (
                 <ol className="solution-list">

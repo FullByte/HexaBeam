@@ -27,10 +27,6 @@ type TranslationKey =
   | 'help.rule.3'
   | 'help.rule.4'
   | 'help.rule.5'
-  | 'help.rule.6'
-  | 'help.rule.7'
-  | 'help.rule.8'
-  | 'help.rule.9'
   | 'help.color.title'
   | 'help.color.source.cyan'
   | 'help.color.source.magenta'
@@ -53,6 +49,21 @@ type TranslationKey =
   | 'help.hint.diverged'
   | 'help.hint.none'
   | 'help.notationLabel'
+  | 'help.notationExplainTitle'
+  | 'help.notationExplainIntro'
+  | 'help.notationExplainEdge'
+  | 'help.notationExplainBlock'
+  | 'help.notationExplainHex'
+  | 'help.notationExplainExamples'
+  | 'help.notationExplainDecodeTitle'
+  | 'help.notationExplainDecode.1'
+  | 'help.notationExplainDecode.2'
+  | 'help.notationExplainDecode.3'
+  | 'help.notationExplainDecode.4'
+  | 'help.notationExplainExamplesTitle'
+  | 'help.notationExplainExample.1'
+  | 'help.notationExplainExample.2'
+  | 'help.notationExplainExample.3'
   | 'win.dialogAria'
   | 'win.levelComplete'
   | 'win.youWin'
@@ -107,13 +118,9 @@ const translations: Record<Language, TranslationDictionary> = {
     'help.close': 'Close',
     'help.rule.1': 'Build the color image on the 16x16 board exactly like the target image.',
     'help.rule.2': 'Top and bottom fire Cyan, left and right fire Magenta.',
-    'help.rule.3': 'If Cyan and Magenta meet on the same cell, the result becomes Mix.',
-    'help.rule.4': 'If a Mix beam later meets Cyan or Magenta, the remaining beam path becomes White.',
-    'help.rule.5': 'Beams travel straight and stop before the first block.',
-    'help.rule.6': 'Player blocks can only be placed on empty, uncolored cells.',
-    'help.rule.7': 'Each edge node can only be used once.',
-    'help.rule.8': 'Undo reverts the last move, Reset restarts the level.',
-    'help.rule.9': 'Notation: T/B/L/R + hex slot for beams, X + hex XY for blocks (e.g. X6A).',
+    'help.rule.3': 'Beams travel straight and stop before the first block.',
+    'help.rule.4': 'If Cyan and Magenta meet on the same cell, the result becomes Mix.',
+    'help.rule.5': 'If a Mix beam later meets Cyan or Magenta, the remaining beam path becomes White.',    
     'help.color.title': 'Color Rules (Visual Guide)',
     'help.color.source.cyan': 'Top/Bottom edges fire Cyan',
     'help.color.source.magenta': 'Left/Right edges fire Magenta',
@@ -138,6 +145,26 @@ const translations: Record<Language, TranslationDictionary> = {
       'Your current attempt diverges from the verified solution path. Use Undo/Reset or open the full solution.',
     'help.hint.none': 'No further hint step is available.',
     'help.notationLabel': 'Canonical notation',
+    'help.notationExplainTitle': 'Notation Explained',
+    'help.notationExplainIntro': 'Each token in the canonical solution represents exactly one move.',
+    'help.notationExplainEdge':
+      'T/B/L/R + hex slot fires an edge node: T=top, B=bottom, L=left, R=right.',
+    'help.notationExplainBlock':
+      'X + hex XY places a player block: first hex digit = X (column), second hex digit = Y (row).',
+    'help.notationExplainHex':
+      'Hex means 0-9 and A-F (10-15). On a 16x16 board, slots and coordinates are encoded from 0 to F.',
+    'help.notationExplainExamples':
+      'Examples: T4 (top, slot 4), RA (right, slot A), X6A (block at column 6, row A).',
+    'help.notationExplainDecodeTitle': 'How to Read a Token',
+    'help.notationExplainDecode.1': 'Start with the first character: T/B/L/R means edge shot, X means block placement.',
+    'help.notationExplainDecode.2': 'For edge shots: the remaining characters are the slot index in hex (for example A = 10).',
+    'help.notationExplainDecode.3': 'For blocks: the two following hex digits are XY coordinates (X = column, Y = row).',
+    'help.notationExplainDecode.4':
+      'Read tokens from left to right. The sequence is the exact canonical move order used for validation.',
+    'help.notationExplainExamplesTitle': 'Decoded Examples',
+    'help.notationExplainExample.1': 'T4 -> fire top edge slot 4',
+    'help.notationExplainExample.2': 'RA -> fire right edge slot A (decimal 10)',
+    'help.notationExplainExample.3': 'X6A -> place block at column 6, row A (decimal 10)',
     'win.dialogAria': 'Level complete',
     'win.levelComplete': 'Level Complete',
     'win.youWin': 'YOU WIN',
@@ -189,13 +216,9 @@ const translations: Record<Language, TranslationDictionary> = {
     'help.close': 'Schließen',
     'help.rule.1': 'Baue das Farbbild auf dem 16x16-Feld exakt so nach wie im Zielbild.',
     'help.rule.2': 'Oben und unten feuern Cyan, links und rechts feuern Magenta.',
-    'help.rule.3': 'Treffen Cyan und Magenta auf derselben Zelle zusammen, wird daraus Mix.',
-    'help.rule.4': 'Trifft ein Mix-Strahl später auf Cyan oder Magenta, wird der restliche Strahlverlauf Weiß.',
-    'help.rule.5': 'Strahlen laufen gerade und stoppen vor dem ersten Block.',
-    'help.rule.6': 'Spieler-Blöcke dürfen nur auf leere, noch ungefärbte Zellen gesetzt werden.',
-    'help.rule.7': 'Jeder Randpunkt darf nur einmal benutzt werden.',
-    'help.rule.8': 'Rückgängig setzt den letzten Zug zurück, Zurücksetzen startet das Level neu.',
-    'help.rule.9': 'Notation: T/B/L/R + Hex-Slot für Strahlen, X + Hex-XY für Blöcke (z. B. X6A).',
+    'help.rule.3': 'Strahlen laufen gerade und stoppen vor dem ersten Block.',
+    'help.rule.4': 'Treffen Cyan und Magenta auf derselben Zelle zusammen, wird daraus Mix.',
+    'help.rule.5': 'Trifft ein Mix-Strahl später auf Cyan oder Magenta, wird der restliche Strahlverlauf Weiß.',
     'help.color.title': 'Farblogik (mit Beispielen)',
     'help.color.source.cyan': 'Oben/Unten feuert Cyan',
     'help.color.source.magenta': 'Links/Rechts feuert Magenta',
@@ -220,6 +243,29 @@ const translations: Record<Language, TranslationDictionary> = {
       'Dein aktueller Versuch weicht vom verifizierten Lösungsweg ab. Nutze Rückgängig/Zurücksetzen oder öffne die komplette Lösung.',
     'help.hint.none': 'Kein weiterer Hinweis-Schritt verfügbar.',
     'help.notationLabel': 'Kanonische Notation',
+    'help.notationExplainTitle': 'Notation erklärt',
+    'help.notationExplainIntro': 'Jeder Eintrag in der kanonischen Lösung steht für genau einen Zug.',
+    'help.notationExplainEdge':
+      'T/B/L/R + Hex-Slot feuert einen Randpunkt: T=oben, B=unten, L=links, R=rechts.',
+    'help.notationExplainBlock':
+      'X + Hex-XY setzt einen Spieler-Block: erste Hex-Ziffer = X (Spalte), zweite Hex-Ziffer = Y (Zeile).',
+    'help.notationExplainHex':
+      'Hex bedeutet 0-9 und A-F (10-15). Auf dem 16x16-Feld sind Slots und Koordinaten daher von 0 bis F kodiert.',
+    'help.notationExplainExamples':
+      'Beispiele: T4 (oben, Slot 4), RA (rechts, Slot A), X6A (Block bei Spalte 6, Zeile A).',
+    'help.notationExplainDecodeTitle': 'So liest du ein Token',
+    'help.notationExplainDecode.1':
+      'Starte mit dem ersten Zeichen: T/B/L/R bedeutet Randstrahl, X bedeutet Block platzieren.',
+    'help.notationExplainDecode.2':
+      'Bei Randstrahlen: die restlichen Zeichen sind der Slot-Index in Hex (z. B. A = 10).',
+    'help.notationExplainDecode.3':
+      'Bei Blöcken: die zwei folgenden Hex-Ziffern sind XY-Koordinaten (X = Spalte, Y = Zeile).',
+    'help.notationExplainDecode.4':
+      'Lies die Tokens von links nach rechts. Die Reihenfolge ist die exakte kanonische Zugfolge der Validierung.',
+    'help.notationExplainExamplesTitle': 'Dekodierte Beispiele',
+    'help.notationExplainExample.1': 'T4 -> oberen Rand, Slot 4 feuern',
+    'help.notationExplainExample.2': 'RA -> rechten Rand, Slot A feuern (dezimal 10)',
+    'help.notationExplainExample.3': 'X6A -> Block bei Spalte 6, Zeile A setzen (dezimal 10)',
     'win.dialogAria': 'Level abgeschlossen',
     'win.levelComplete': 'Level abgeschlossen',
     'win.youWin': 'DU HAST GEWONNEN',

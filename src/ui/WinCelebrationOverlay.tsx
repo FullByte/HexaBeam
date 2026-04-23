@@ -189,8 +189,10 @@ export function WinCelebrationOverlay({
   }
 
   const nextButtonLabel =
-    hasNextLevel && nextLevelTitle
-      ? t(language, 'win.nextLevel', { title: nextLevelTitle })
+    hasNextLevel
+      ? nextLevelTitle
+        ? t(language, 'win.nextLevel', { title: nextLevelTitle })
+        : t(language, 'controls.nextPuzzle')
       : t(language, 'win.restartAtLevel1');
 
   return (

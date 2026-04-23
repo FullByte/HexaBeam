@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BoardCanvas } from '../game/render/BoardCanvas';
 import { useGameStore } from '../game/state/store';
-import { getLocalizedLevelTitle } from '../i18n/text';
 import { BoardTopBar } from '../ui/BoardTopBar';
 import { TargetOverlay } from '../ui/TargetOverlay';
 import { WinCelebrationOverlay } from '../ui/WinCelebrationOverlay';
@@ -11,14 +10,10 @@ export function App() {
   const language = useGameStore((state) => state.language);
   const levels = useGameStore((state) => state.levels);
   const currentLevelId = useGameStore((state) => state.currentLevelId);
-  const loadLevel = useGameStore((state) => state.loadLevel);
+  const loadPuzzlePool = useGameStore((state) => state.loadPuzzlePool);
+  const nextPuzzle = useGameStore((state) => state.nextPuzzle);
   const reset = useGameStore((state) => state.reset);
   const [showTargetOverlay, setShowTargetOverlay] = useState(true);
-  const levelIndex = useMemo(
-    () => levels.findIndex((level) => level.id === currentLevelId),
-    [levels, currentLevelId],
-  );
-  const nextLevel = levelIndex >= 0 && levelIndex < levels.length - 1 ? levels[levelIndex + 1] : null;
 
   useEffect(() => {
     if (isWin) {
@@ -30,16 +25,9 @@ export function App() {
     setShowTargetOverlay(true);
   }, [currentLevelId]);
 
-  function handleNextLevel() {
-    if (nextLevel) {
-      loadLevel(nextLevel.id);
-      return;
-    }
-
-    if (levels[0]) {
-      loadLevel(levels[0].id);
-    }
-  }
+  useEffect(() => {
+    void loadPuzzlePool();
+  }, [loadPuzzlePool]);
 
   return (
     <div className={`app-shell${isWin ? ' app-shell--win' : ''}`}>
@@ -58,10 +46,9 @@ export function App() {
       <WinCelebrationOverlay
         open={isWin}
         language={language}
-        hasNextLevel={Boolean(nextLevel)}
-        nextLevelTitle={nextLevel ? getLocalizedLevelTitle(nextLevel, language) : undefined}
+        hasNextLevel={levels.length > 0}
         onReplayLevel={reset}
-        onNextLevel={handleNextLevel}
+        onNextLevel={nextPuzzle}
       />
     </div>
   );

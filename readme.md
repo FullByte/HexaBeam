@@ -1,4 +1,4 @@
-# HexaBeam
+# Stack Beam
 
 Kleines Puzzle-Spiel im Browser: Du platzierst Blöcke auf dem 16x16-Feld und schießt Strahlen vom Rand ab, bis das erzeugte Farbbild exakt zum Zielbild passt.
 
@@ -15,11 +15,11 @@ npm run dev
 npm run build
 ```
 
-Der statische Output liegt danach in `dist/`.
+Der statische Output liegt danach in `docs/games/stack-beam/`.
 
 ## Statisch hosten
 
-Den Inhalt von `dist/` auf einen beliebigen Static Host legen, zum Beispiel:
+Den Inhalt von `docs/games/stack-beam/` auf einen beliebigen Static Host legen, zum Beispiel:
 
 - GitHub Pages
 - Netlify

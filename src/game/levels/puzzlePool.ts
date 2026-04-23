@@ -1,4 +1,6 @@
 import type { Level } from '../core/types';
+import { createLevelFromBlueprint } from './levelBuilder';
+import { parseSolutionNotation } from './solution';
 
 export const DIFFICULTY_ORDER = ['easy', 'normal', 'hard'] as const;
 export type Difficulty = (typeof DIFFICULTY_ORDER)[number];
@@ -8,6 +10,27 @@ export type PuzzlePool = Record<Difficulty, Level[]>;
 export interface PuzzlePoolDocument {
   generatedAt: string;
   puzzles: PuzzlePool;
+}
+
+interface CompactPuzzleDefinition {
+  id: string;
+  title: string;
+  description?: string;
+  playerBlockCount: number;
+  initialMap: string[];
+  solutionNotation: string | string[];
+}
+
+export interface CompactPuzzlePoolDocument {
+  format: 'stack-beam-puzzle-pool-v2';
+  generatedAt: string;
+  encoding: {
+    initialMap: {
+      empty: '0';
+      fixedBlock: 'B';
+    };
+  };
+  puzzles: Record<Difficulty, CompactPuzzleDefinition[]>;
 }
 
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -60,7 +83,7 @@ function isTargetImage(value: unknown): boolean {
   return value.every((row) => Array.isArray(row));
 }
 
-function isLevelLike(value: unknown): value is Level {
+function isLegacyLevelLike(value: unknown): value is Level {
   if (!isObject(value)) {
     return false;
   }
@@ -106,6 +129,146 @@ function isLevelLike(value: unknown): value is Level {
   }
 
   return true;
+}
+
+function parseInitialMap(initialMap: string[]): { gridSize: number; fixedBlocks: Level['fixedBlocks'] } {
+  if (!Array.isArray(initialMap) || initialMap.length === 0) {
+    throw new Error('initialMap must be a non-empty array of strings.');
+  }
+
+  const gridSize = initialMap.length;
+  const fixedBlocks: Level['fixedBlocks'] = [];
+
+  for (let y = 0; y < initialMap.length; y += 1) {
+    const row = initialMap[y];
+
+    if (typeof row !== 'string') {
+      throw new Error('initialMap rows must be strings.');
+    }
+
+    if (row.length !== gridSize) {
+      throw new Error(`initialMap must be square. Row ${y} has length ${row.length}, expected ${gridSize}.`);
+    }
+
+    for (let x = 0; x < row.length; x += 1) {
+      const symbol = row[x]!;
+
+      if (symbol === '0') {
+        continue;
+      }
+
+      if (symbol === 'B' || symbol === '1') {
+        fixedBlocks.push({ x, y });
+        continue;
+      }
+
+      throw new Error(`Unsupported initialMap symbol "${symbol}" at (${x},${y}).`);
+    }
+  }
+
+  return { gridSize, fixedBlocks };
+}
+
+function parseCompactPuzzleDefinition(
+  raw: unknown,
+  difficulty: Difficulty,
+): Level {
+  if (!isObject(raw)) {
+    throw new Error(`Compact puzzle definition for "${difficulty}" must be an object.`);
+  }
+
+  if (
+    typeof raw.id !== 'string' ||
+    typeof raw.title !== 'string' ||
+    typeof raw.playerBlockCount !== 'number' ||
+    !Array.isArray(raw.initialMap)
+  ) {
+    throw new Error(`Compact puzzle definition for "${difficulty}" misses required fields.`);
+  }
+
+  const solutionNotationRaw = raw.solutionNotation;
+
+  if (!(typeof solutionNotationRaw === 'string' || Array.isArray(solutionNotationRaw))) {
+    throw new Error(`Compact puzzle "${raw.id}" has invalid solutionNotation.`);
+  }
+
+  const { gridSize, fixedBlocks } = parseInitialMap(raw.initialMap as string[]);
+
+  if (gridSize !== 16) {
+    throw new Error(`Compact puzzle "${raw.id}" has gridSize=${gridSize}. Expected 16.`);
+  }
+
+  const solution = parseSolutionNotation(solutionNotationRaw as string | string[]);
+
+  return createLevelFromBlueprint({
+    id: raw.id,
+    title: raw.title,
+    description: typeof raw.description === 'string' ? raw.description : `Generated ${difficulty} puzzle.`,
+    playerBlockCount: raw.playerBlockCount,
+    fixedBlocks,
+    solution,
+    difficulty,
+  });
+}
+
+function encodeInitialMap(level: Level): string[] {
+  const grid = Array.from({ length: level.gridSize }, () =>
+    Array.from({ length: level.gridSize }, () => '0'),
+  );
+
+  for (const block of level.fixedBlocks) {
+    if (grid[block.y]?.[block.x] !== undefined) {
+      grid[block.y]![block.x] = 'B';
+    }
+  }
+
+  return grid.map((row) => row.join(''));
+}
+
+export function toCompactPuzzlePoolDocument(
+  puzzles: PuzzlePool,
+  generatedAt = new Date().toISOString(),
+): CompactPuzzlePoolDocument {
+  function toNotation(level: Level): string {
+    return (level.metadata?.solutionNotation ?? []).join(' ');
+  }
+
+  return {
+    format: 'stack-beam-puzzle-pool-v2',
+    generatedAt,
+    encoding: {
+      initialMap: {
+        empty: '0',
+        fixedBlock: 'B',
+      },
+    },
+    puzzles: {
+      easy: puzzles.easy.map((level) => ({
+        id: level.id,
+        title: level.title,
+        description: level.description,
+        playerBlockCount: level.playerBlockCount,
+        initialMap: encodeInitialMap(level),
+        solutionNotation: toNotation(level),
+      })),
+      normal: puzzles.normal.map((level) => ({
+        id: level.id,
+        title: level.title,
+        description: level.description,
+        playerBlockCount: level.playerBlockCount,
+        initialMap: encodeInitialMap(level),
+        solutionNotation: toNotation(level),
+      })),
+      hard: puzzles.hard.map((level) => ({
+        id: level.id,
+        title: level.title,
+        description: level.description,
+        playerBlockCount: level.playerBlockCount,
+        initialMap: encodeInitialMap(level),
+        solutionNotation: toNotation(level),
+      })),
+    },
+  };
 }
 
 export function createEmptyPuzzlePool(): PuzzlePool {
@@ -157,25 +320,26 @@ export function parsePuzzlePoolDocument(data: unknown): PuzzlePoolDocument {
   const pool = createEmptyPuzzlePool();
 
   for (const difficulty of DIFFICULTY_ORDER) {
-    const rawLevels = data.puzzles[difficulty];
+    const rawEntries = data.puzzles[difficulty];
 
-    if (!Array.isArray(rawLevels)) {
+    if (!Array.isArray(rawEntries)) {
       throw new Error(`Puzzle list for difficulty "${difficulty}" must be an array.`);
     }
 
-    for (const rawLevel of rawLevels) {
-      if (!isLevelLike(rawLevel)) {
-        throw new Error(`Invalid level entry in "${difficulty}" puzzle list.`);
+    for (const rawEntry of rawEntries) {
+      if (isLegacyLevelLike(rawEntry)) {
+        const level: Level = {
+          ...rawEntry,
+          metadata: {
+            ...rawEntry.metadata,
+            difficulty,
+          },
+        };
+        pool[difficulty].push(level);
+        continue;
       }
 
-      const level: Level = {
-        ...rawLevel,
-        metadata: {
-          ...rawLevel.metadata,
-          difficulty,
-        },
-      };
-      pool[difficulty].push(level);
+      pool[difficulty].push(parseCompactPuzzleDefinition(rawEntry, difficulty));
     }
   }
 

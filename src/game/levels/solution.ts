@@ -68,6 +68,81 @@ export function formatSolutionNotation(solution: RuntimeAction[]): string[] {
   return solution.map((action) => formatRuntimeActionNotation(action));
 }
 
+function parseHex(value: string, context: string): number {
+  const parsed = Number.parseInt(value, 16);
+
+  if (!Number.isFinite(parsed)) {
+    throw new Error(`Invalid hex value for ${context}: ${value}`);
+  }
+
+  return parsed;
+}
+
+export function parseRuntimeActionNotation(token: string): RuntimeAction {
+  const trimmed = token.trim().toUpperCase();
+
+  if (!trimmed) {
+    throw new Error('Empty notation token.');
+  }
+
+  if (trimmed.startsWith('X')) {
+    const payload = trimmed.slice(1);
+
+    if (payload.length !== 2) {
+      throw new Error(`Invalid block notation: ${token}`);
+    }
+
+    return {
+      type: 'place-block',
+      position: {
+        x: parseHex(payload[0]!, 'block x'),
+        y: parseHex(payload[1]!, 'block y'),
+      },
+    };
+  }
+
+  const sideCode = trimmed[0]!;
+  const indexPayload = trimmed.slice(1);
+
+  if (!indexPayload) {
+    throw new Error(`Missing edge index in notation: ${token}`);
+  }
+
+  const side =
+    sideCode === 'T'
+      ? 'top'
+      : sideCode === 'R'
+        ? 'right'
+        : sideCode === 'B'
+          ? 'bottom'
+          : sideCode === 'L'
+            ? 'left'
+            : null;
+
+  if (!side) {
+    throw new Error(`Invalid edge side in notation: ${token}`);
+  }
+
+  return {
+    type: 'fire-edge',
+    edge: {
+      side,
+      index: parseHex(indexPayload, 'edge index'),
+    },
+  };
+}
+
+export function parseSolutionNotation(notation: string | string[]): RuntimeAction[] {
+  const tokens = Array.isArray(notation)
+    ? notation
+    : notation
+        .split(/\s+/)
+        .map((token) => token.trim())
+        .filter((token) => token.length > 0);
+
+  return tokens.map((token) => parseRuntimeActionNotation(token));
+}
+
 export function describeRuntimeAction(action: RuntimeAction, language: Language = 'de'): string {
   if (action.type === 'place-block') {
     return `${formatRuntimeActionNotation(action)} - ${t(language, 'action.placeBlock', {

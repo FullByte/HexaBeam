@@ -1,5 +1,6 @@
 import { useGameStore } from '../game/state/store';
-import { getLocalizedLevelTitle, t, translateCoreMessage, type Language } from '../i18n/text';
+import { t, type Language } from '../i18n/text';
+import type { Difficulty } from '../game/levels/puzzlePool';
 import { BackgroundMusicPlayer } from './BackgroundMusicPlayer';
 import { HelpDialog } from './HelpDialog';
 import { HintDialog } from './HintDialog';
@@ -14,10 +15,9 @@ export function BoardTopBar({ showTargetOverlay, onToggleTargetOverlay }: BoardT
   const setLanguage = useGameStore((state) => state.setLanguage);
   const totalPlayerBlocks = useGameStore((state) => state.level.playerBlockCount);
   const remainingPlayerBlocks = useGameStore((state) => state.runtime.remainingPlayerBlocks);
-  const message = useGameStore((state) => state.runtime.lastActionMessage);
-  const levels = useGameStore((state) => state.levels);
-  const currentLevelId = useGameStore((state) => state.currentLevelId);
-  const loadLevel = useGameStore((state) => state.loadLevel);
+  const selectedDifficulty = useGameStore((state) => state.selectedDifficulty);
+  const setDifficulty = useGameStore((state) => state.setDifficulty);
+  const nextPuzzle = useGameStore((state) => state.nextPuzzle);
   const canUndo = useGameStore((state) => state.history.length > 0);
   const undo = useGameStore((state) => state.undo);
   const reset = useGameStore((state) => state.reset);
@@ -44,15 +44,14 @@ export function BoardTopBar({ showTargetOverlay, onToggleTargetOverlay }: BoardT
         <div className="board-topbar__controls">
           <div className="board-topbar__controls-row">
             <select
-              className="level-select-inline level-select-inline--level"
-              value={currentLevelId}
-              onChange={(event) => loadLevel(event.target.value)}
+              className="level-select-inline level-select-inline--difficulty"
+              value={selectedDifficulty}
+              onChange={(event) => setDifficulty(event.target.value as Difficulty)}
+              aria-label={t(language, 'difficulty.label')}
             >
-              {levels.map((level) => (
-                <option key={level.id} value={level.id}>
-                  {getLocalizedLevelTitle(level, language)}
-                </option>
-              ))}
+              <option value="easy">{t(language, 'difficulty.easy')}</option>
+              <option value="normal">{t(language, 'difficulty.normal')}</option>
+              <option value="hard">{t(language, 'difficulty.hard')}</option>
             </select>
             <select
               className="level-select-inline language-select"
@@ -81,15 +80,15 @@ export function BoardTopBar({ showTargetOverlay, onToggleTargetOverlay }: BoardT
             <button type="button" className="control-button" onClick={reset}>
               {t(language, 'controls.reset')}
             </button>
+            <button type="button" className="control-button" onClick={nextPuzzle}>
+              {t(language, 'controls.nextPuzzle')}
+            </button>
             <HelpDialog />
             <HintDialog />
           </div>
         </div>
       </div>
 
-      {message ? (
-        <div className="message-box board-topbar__message">{translateCoreMessage(message, language)}</div>
-      ) : null}
     </div>
   );
 }
